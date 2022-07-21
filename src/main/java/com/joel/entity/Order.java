@@ -23,24 +23,29 @@ import lombok.ToString;
  * @author joel.rubio
  *
  */
-//@Data
-//@Entity
-//public class Order {
-//
-//	@Id
-//	@GeneratedValue(strategy = GenerationType.IDENTITY)
-//	private int id;
-//	
-//	@CreationTimestamp
-//	@Column(name = "created_at", updatable = false)
-//	private LocalDateTime createdAt;
-//	
-//	@Enumerated(EnumType.STRING)
-//	@Column(nullable = false)
-//	private OrderStatus status;
-//	
-//	@ToString.Exclude
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "cart_id")
-//	private Cart cart;
-//}
+@Data
+@Entity
+public class Order {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	
+	@CreationTimestamp
+	@Column(name = "created_at", updatable = false)
+	private LocalDateTime createdAt;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private OrderStatus status;
+	
+	@ToString.Exclude
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "cart_id")
+	private Cart cart;
+	
+	public void addCart(Cart cart) {
+		
+		this.cart = cart;
+	}
+}

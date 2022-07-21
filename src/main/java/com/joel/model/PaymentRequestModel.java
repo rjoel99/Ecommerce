@@ -29,6 +29,7 @@ public abstract class PaymentRequestModel {
 
 	public abstract boolean isEmpty();
 	
+	
 	public static Map<Class<? extends PaymentRequestModel>, BiFunction<PaymentRequestModel, Customer, Payment>> getPaymentsToCreate() {
 		
 		return Map.of(CreditCardRequestModel.class, PaymentRequestModel::createCreditCard,
@@ -40,6 +41,7 @@ public abstract class PaymentRequestModel {
 		return Map.of(CreditCardRequestModel.class, PaymentRequestModel::updateCreditCard,
 					  PayPalRequestModel.class, PaymentRequestModel::updatePayPal);
 	}
+	
 	
 	public static Payment createCreditCard(PaymentRequestModel paymentReq, Customer customer) {
 		
@@ -55,6 +57,7 @@ public abstract class PaymentRequestModel {
 		
 		return new PayPal(payPalReq.getNumber(), payPalReq.getEmail(), customer);
 	}
+	
 	
 	public static void updateCreditCard(Payment payment, PaymentRequestModel paymentReq) {
 		
@@ -79,6 +82,7 @@ public abstract class PaymentRequestModel {
 		if (creditCardReq.getExpireYear() != null)
 			((CreditCard) payment).setExpireYear(creditCardReq.getExpireYear());
 	}
+	
 	
 	public static void updatePayPal(Payment payment, PaymentRequestModel paymentReq) {
 		

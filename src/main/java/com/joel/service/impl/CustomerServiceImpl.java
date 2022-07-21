@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.joel.entity.Customer;
 import com.joel.model.CustomerRequestModel;
 import com.joel.repository.CustomerRepository;
+import com.joel.service.CartService;
 import com.joel.service.CustomerService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,11 +29,13 @@ import lombok.extern.slf4j.Slf4j;
 public class CustomerServiceImpl implements CustomerService {
 
 	private CustomerRepository customerRepository;
-
-	public CustomerServiceImpl(CustomerRepository customerRepository) {
-		this.customerRepository = customerRepository;
-	}
+	private CartService cartService;
 	
+	public CustomerServiceImpl(CustomerRepository customerRepository, CartService cartService) {
+		this.customerRepository = customerRepository;
+		this.cartService = cartService;
+	}
+
 	public Collection<Customer> findAll(Integer page, Integer sizePage, String[] sort) {
 		
 		log.info("Getting all customers...");
@@ -98,6 +101,8 @@ public class CustomerServiceImpl implements CustomerService {
 		customerRepository.save(customer);
 	
 		log.info("Customer added");
+		
+		cartService.create(customer);
 	}
 	
 	public void updateById(int id, CustomerRequestModel customerToUpdate) {
