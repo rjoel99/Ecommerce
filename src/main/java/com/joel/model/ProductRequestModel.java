@@ -2,8 +2,11 @@ package com.joel.model;
 
 import java.math.BigDecimal;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+
+import com.joel.entity.CurrencyCode;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -25,10 +28,9 @@ public class ProductRequestModel {
 	@NotEmpty
 	private String description;
 	
-	@NotNull
+	@Min(value = 1)
 	private BigDecimal price;
 	
 	@NotNull
-	@NotEmpty
-	private String currency;
+	private CurrencyCode currencyCode;
 }

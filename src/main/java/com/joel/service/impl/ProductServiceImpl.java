@@ -58,7 +58,7 @@ public class ProductServiceImpl implements ProductService {
 		
 		log.info("Adding new product...");
 		
-		Product product = new Product(productReq.getName(), productReq.getDescription(), productReq.getPrice(), productReq.getCurrency());
+		Product product = new Product(productReq.getName(), productReq.getDescription(), productReq.getPrice(), productReq.getCurrencyCode());
 		
 		productRepository.save(product);
 		
@@ -75,7 +75,7 @@ public class ProductServiceImpl implements ProductService {
 		product.setName(productReq.getName());
 		product.setDescription(productReq.getDescription());
 		product.setPrice(productReq.getPrice());
-		product.setCurrency(productReq.getCurrency());
+		product.setCurrencyCode(productReq.getCurrencyCode());
 		
 		log.info("Product with id {} updated", productId);
 	}
@@ -86,6 +86,8 @@ public class ProductServiceImpl implements ProductService {
 		Product product = findById(productId);
 		
 		log.info("Deleting product with id {}...", productId);
+		
+		product.removeFromCart();
 		
 		productRepository.delete(product);
 		

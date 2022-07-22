@@ -5,10 +5,12 @@ import java.time.LocalDateTime;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.joel.entity.Cart;
@@ -38,14 +40,26 @@ public class CartController {
 		return ResponseEntity.ok(cart);
 	}
 	
-	@PutMapping(path = "/{cart_id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> updateById(@PathVariable("cart_id") int cartId) {
+	@PostMapping(path = "/{cart_id}")
+	public ResponseEntity<Object> addProductToCart(@PathVariable("cart_id") int cartId, @RequestParam("product") int productId) {
 		
-		cartService.updateById(cartId, 0);
+		cartService.addProductToCart(cartId, productId);
 		
 		return ResponseEntity.ok(SuccessMessage.builder()
 				.status(HttpStatus.OK.value())
-				.message("Cart updated")
+				.message("Product added to cart")
+				.datetime(LocalDateTime.now())
+				.build());
+	}
+	
+	@DeleteMapping(path = "/{cart_id}")
+	public ResponseEntity<Object> removeProductFromCart(@PathVariable("cart_id") int cartId, @RequestParam("product") int productId) {
+		
+		cartService.removeProductFromCart(cartId, productId);
+		
+		return ResponseEntity.ok(SuccessMessage.builder()
+				.status(HttpStatus.OK.value())
+				.message("Product removed from cart")
 				.datetime(LocalDateTime.now())
 				.build());
 	}

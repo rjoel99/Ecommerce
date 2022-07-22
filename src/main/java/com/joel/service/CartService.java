@@ -12,6 +12,6 @@ public interface CartService {
 
 	Cart findById(int cartId);
 	void create(Customer customer);
-	void updateById(int cartId, int productId);
-//	void deleteById(int cartId);
+	void addProductToCart(int cartId, int productId);
+	void removeProductFromCart(int cartId, int productId);
 }

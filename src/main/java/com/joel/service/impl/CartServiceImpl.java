@@ -1,7 +1,5 @@
 package com.joel.service.impl;
 
-import java.math.BigDecimal;
-
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.stereotype.Service;
@@ -50,7 +48,7 @@ public class CartServiceImpl implements CartService {
 		
 		log.info("Creating cart for customer with id {}...", customer.getId());
 		
-		Cart cart = new Cart(BigDecimal.ZERO, customer);
+		Cart cart = new Cart(customer);
 		
 		cartRepository.save(cart);
 		
@@ -58,18 +56,34 @@ public class CartServiceImpl implements CartService {
 	}
 
 	@Override
-	public void updateById(int cartId, int productId) {
+	public void addProductToCart(int cartId, int productId) {
 		
 		Cart cart = findById(cartId);
 		
 		Product product = productService.findById(productId);
 		
-		log.info("Updating cart with id {}...", cartId);
+		log.info("Adding product to cart with id {}...", cartId);
 		
 		cart.addProduct(product);
 		
 		cartRepository.save(cart);
 		
-		log.info("Cart with id {} updated", cartId);
+		log.info("Product added to cart with id {}", cartId);
+	}
+	
+	@Override
+	public void removeProductFromCart(int cartId, int productId) {
+		
+		Cart cart = findById(cartId);
+		
+		Product product = productService.findById(productId);
+		
+		log.info("Removing product with id {} from cart with id {}...", productId, cartId);
+		
+		cart.removeFromProduct(product);
+		
+		cartRepository.save(cart);
+		
+		log.info("Product with id {} removed from cart with id {}", productId, cartId);
 	}
 }
