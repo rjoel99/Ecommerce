@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.joel.entity.Order;
 import com.joel.message.SuccessMessage;
 import com.joel.model.OrderRequestModel;
+import com.joel.model.OrderResponseModel;
 import com.joel.service.OrderService;
 
 /**
@@ -36,17 +37,17 @@ public class OrderController {
 	}
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Collection<Order>> getAll(@PathVariable("cart_id") int cartId) {
+	public ResponseEntity<Collection<OrderResponseModel>> getAll(@PathVariable("cart_id") int cartId) {
 		
-		Collection<Order> orders = orderService.findAllByCartId(cartId);
+		Collection<OrderResponseModel> orders = orderService.findAll(cartId);
 		
 		return ResponseEntity.ok(orders);
 	}
 	
 	@GetMapping(path = "/{order_id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Order> getById(@PathVariable("order_id") int orderId) {
+	public ResponseEntity<OrderResponseModel> getById(@PathVariable("order_id") int orderId) {
 		
-		Order order = orderService.findById(orderId);
+		OrderResponseModel order = orderService.findByIdAsModel(orderId);
 		
 		return ResponseEntity.ok(order);
 	}

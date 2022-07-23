@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.joel.entity.Payment;
 import com.joel.message.SuccessMessage;
 import com.joel.model.PaymentRequestModel;
+import com.joel.model.PaymentResponseModel;
 import com.joel.service.PaymentService;
 
 /**
@@ -40,17 +40,17 @@ public class PaymentController {
 	
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Collection<Payment>> getAll(@PathVariable("customer_id") int customerId) {
+	public ResponseEntity<Collection<PaymentResponseModel>> getAll(@PathVariable("customer_id") int customerId) {
 		
-		Collection<Payment> payments = paymentService.findAll(customerId);
+		Collection<PaymentResponseModel> payments = paymentService.findAll(customerId);
 		
 		return ResponseEntity.ok(payments);
 	}
 	
 	@GetMapping(path = "/{payment_id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Payment> getById(@PathVariable("payment_id") int paymentId) {
+	public ResponseEntity<PaymentResponseModel> getById(@PathVariable("payment_id") int paymentId) {
 		
-		Payment payment = paymentService.findById(paymentId);
+		PaymentResponseModel payment = paymentService.findByIdAsModel(paymentId);
 		
 		return ResponseEntity.ok(payment);
 	}

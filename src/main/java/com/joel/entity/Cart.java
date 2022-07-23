@@ -16,8 +16,6 @@ import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -39,7 +37,6 @@ public class Cart {
 	@Column(name = "created_at", nullable = false, updatable = false)
 	private LocalDateTime createdAt;
 	
-	@JsonIgnore
 	@OneToOne
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
@@ -50,7 +47,6 @@ public class Cart {
 			   inverseJoinColumns = @JoinColumn(name = "product_id"))
 	private List<Product> products;
 	
-	@JsonIgnore
 	@OneToMany(mappedBy = "cart")
 	private List<Order> orders;
 	

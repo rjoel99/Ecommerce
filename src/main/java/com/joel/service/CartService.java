@@ -2,6 +2,7 @@ package com.joel.service;
 
 import com.joel.entity.Cart;
 import com.joel.entity.Customer;
+import com.joel.model.CartResponseModel;
 
 /**
  * 
@@ -10,6 +11,7 @@ import com.joel.entity.Customer;
  */
 public interface CartService {
 
+	CartResponseModel findByIdAsModel(int cartId);
 	Cart findById(int cartId);
 	void create(Customer customer);
 	void addProductToCart(int cartId, int productId);

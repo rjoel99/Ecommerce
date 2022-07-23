@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import com.joel.entity.Product;
 import com.joel.model.ProductRequestModel;
+import com.joel.model.ProductResponseModel;
 
 /**
  * 
@@ -12,7 +13,8 @@ import com.joel.model.ProductRequestModel;
  */
 public interface ProductService {
 
-	Collection<Product> findAll();
+	Collection<ProductResponseModel> findAll();
+	ProductResponseModel findByIdAsModel(int productId);
 	Product findById(int productId);
 	void add(ProductRequestModel productReq);
 	void updateById(int productId, ProductRequestModel productReq);

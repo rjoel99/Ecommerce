@@ -1,9 +1,6 @@
 package com.joel.service.impl;
 
 import java.util.Collection;
-import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -12,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.joel.entity.Customer;
 import com.joel.entity.Payment;
 import com.joel.model.PaymentRequestModel;
+import com.joel.model.PaymentResponseModel;
 import com.joel.repository.PaymentRepository;
 import com.joel.service.CustomerService;
 import com.joel.service.PaymentService;
@@ -36,7 +34,7 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 
 	@Override
-	public Collection<Payment> findAll(int customerId) {
+	public Collection<PaymentResponseModel> findAll(int customerId) {
 		
 		log.info("Getting all payments by customer id {}...", customerId);
 		
@@ -44,20 +42,28 @@ public class PaymentServiceImpl implements PaymentService {
 		
 		log.info("Payments by customer id {} obtained", customerId);
 		
-		return payments;
+		return PaymentResponseModel.fromEntitiesToModels(payments);
 	}
-
+	
 	@Override
-	public Payment findById(int id) {
+	public Payment findById(int paymentId) {
 		
-		log.info("Getting payment by id {}...", id);
+		log.info("Getting payment by id {}...", paymentId);
 		
-		Payment payment = paymentRepository.findById(id)
-				.orElseThrow(() -> new EntityNotFoundException("The payment with id " + id + " doesn't exist"));
+		Payment payment = paymentRepository.findById(paymentId)
+				.orElseThrow(() -> new EntityNotFoundException("The payment with id " + paymentId + " doesn't exist"));
 		
-		log.info("Payment with id {} obtained", id);
+		log.info("Payment with id {} obtained", paymentId);
 		
 		return payment;
+	}
+	
+	@Override
+	public PaymentResponseModel findByIdAsModel(int paymentId) {
+		
+		Payment payment = findById(paymentId);
+		
+		return PaymentResponseModel.fromEntityToModel(payment);
 	}
 
 	@Override
@@ -77,29 +83,12 @@ public class PaymentServiceImpl implements PaymentService {
 
 	private Payment createFromRequestToEntity(PaymentRequestModel paymentReq, Customer customer) {
 		
-		Payment payment = null;
-		
-		for (Map.Entry<Class<? extends PaymentRequestModel>, BiFunction<PaymentRequestModel, Customer, Payment>> paymentType : 
-			 PaymentRequestModel.getPaymentsToCreate().entrySet()) {
-			
-			if (paymentReq.getClass().isAssignableFrom(paymentType.getKey()))
-				payment = paymentType.getValue().apply(paymentReq, customer);
-		}
-		
-		if (payment == null)
-			throw new IllegalArgumentException("There is no supported payment");
-		
-		return payment;
+		return PaymentRequestModel.createPayment(paymentReq, customer);
 	}
 	
-	private void updateEntity(Payment payment, PaymentRequestModel paymentReq) {
+	private void updateEntityFromRequest(Payment payment, PaymentRequestModel paymentReq) {
 		
-		for (Map.Entry<Class<? extends PaymentRequestModel>, BiConsumer<Payment, PaymentRequestModel>> paymentType : 
-			 PaymentRequestModel.getPaymentsToUpdate().entrySet()) {
-			
-			if (paymentReq.getClass().isAssignableFrom(paymentType.getKey()))
-				paymentType.getValue().accept(payment, paymentReq);
-		}
+		PaymentRequestModel.updatePayment(payment, paymentReq);
 	}
 
 	
@@ -110,7 +99,7 @@ public class PaymentServiceImpl implements PaymentService {
 		
 		log.info("Updating payment with id {}...", paymentId);
 
-		updateEntity(payment, paymentReq);
+		updateEntityFromRequest(payment, paymentReq);
 		
 		paymentRepository.save(payment);
 		

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.joel.entity.Cart;
 import com.joel.entity.Customer;
 import com.joel.entity.Product;
+import com.joel.model.CartResponseModel;
 import com.joel.repository.CartRepository;
 import com.joel.service.CartService;
 import com.joel.service.ProductService;
@@ -29,7 +30,8 @@ public class CartServiceImpl implements CartService {
 		this.cartRepository = cartRepository;
 		this.productService = productService;
 	}
-
+	
+	
 	@Override
 	public Cart findById(int cartId) {
 		
@@ -41,6 +43,17 @@ public class CartServiceImpl implements CartService {
 		log.info("Cart by id {} obtained", cartId);
 		
 		return cart;
+	}
+	
+	@Override
+	public CartResponseModel findByIdAsModel(int cartId) {
+		
+		Cart cart = findById(cartId);
+		
+		return CartResponseModel.builder()
+				.id(cart.getId())
+				.products(cart.getProducts())
+				.build();
 	}
 
 	@Override

@@ -15,9 +15,8 @@ import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * 
@@ -37,7 +36,7 @@ public abstract class Payment {
 	@Column(name = "created_on", updatable = false)
 	private LocalDateTime createdOn;
 	
-	@JsonIgnore
+	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "customer_id")
 	private Customer customer;

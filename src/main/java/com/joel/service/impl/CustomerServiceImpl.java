@@ -3,6 +3,7 @@ package com.joel.service.impl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.joel.entity.Customer;
 import com.joel.model.CustomerRequestModel;
+import com.joel.model.CustomerResponseModel;
 import com.joel.repository.CustomerRepository;
 import com.joel.service.CartService;
 import com.joel.service.CustomerService;
@@ -36,7 +38,8 @@ public class CustomerServiceImpl implements CustomerService {
 		this.cartService = cartService;
 	}
 
-	public Collection<Customer> findAll(Integer page, Integer sizePage, String[] sort) {
+	@Override
+	public Collection<CustomerResponseModel> findAll(Integer page, Integer sizePage, String[] sort) {
 		
 		log.info("Getting all customers...");
 		
@@ -49,7 +52,19 @@ public class CustomerServiceImpl implements CustomerService {
 		
 		log.info("Customers obtained");
 		
-		return customers;
+		return fromEntitiesToModels(customers);
+	}
+	
+	private Collection<CustomerResponseModel> fromEntitiesToModels(Collection<Customer> customers) {
+		
+		return customers.stream()
+			.map(customer -> CustomerResponseModel.builder()
+				.id(customer.getId())
+				.firstName(customer.getFirstName())
+				.lastName(customer.getLastName())
+				.phone(customer.getPhone())
+				.build())
+			.collect(Collectors.toList());
 	}
 	
 	private List<Order> getSortProperties(String[] sort) {
@@ -80,6 +95,7 @@ public class CustomerServiceImpl implements CustomerService {
 		return sortProperties;
 	}
 	
+	@Override
 	public Customer findById(int id) {
 		
 		log.info("Getting customer by id {}...", id);
@@ -92,6 +108,20 @@ public class CustomerServiceImpl implements CustomerService {
 		return customer;
 	}
 	
+	@Override
+	public CustomerResponseModel findByIdAsModel(int id) {
+		
+		Customer customer = findById(id);
+		
+		return CustomerResponseModel.builder()
+				.id(customer.getId())
+				.firstName(customer.getFirstName())
+				.lastName(customer.getLastName())
+				.phone(customer.getPhone())
+				.build();
+	}
+	
+	@Override
 	public void add(CustomerRequestModel customerReqModel) {
 		
 		log.info("Adding new customer...");
@@ -105,6 +135,7 @@ public class CustomerServiceImpl implements CustomerService {
 		cartService.create(customer);
 	}
 	
+	@Override
 	public void updateById(int id, CustomerRequestModel customerToUpdate) {
 		
 		Customer customerSaved = findById(id);
@@ -120,6 +151,7 @@ public class CustomerServiceImpl implements CustomerService {
 		log.info("Customer with id {} updated", id);
 	}
 	
+	@Override
 	public void deleteById(int id) {
 		
 		Customer customer = findById(id);

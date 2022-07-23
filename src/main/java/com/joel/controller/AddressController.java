@@ -21,11 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
-import com.joel.entity.Address;
 import com.joel.message.ErrorMessage;
 import com.joel.message.SuccessMessage;
 import com.joel.model.AddressPatchRequestModel;
 import com.joel.model.AddressRequestModel;
+import com.joel.model.AddressResponseModel;
 import com.joel.service.AddressService;
 
 /**
@@ -44,20 +44,20 @@ public class AddressController {
 	}
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Collection<Address>> getAll(@PathVariable("customer_id") int customerId,
+	public ResponseEntity<Collection<AddressResponseModel>> getAll(@PathVariable("customer_id") int customerId,
 													  @RequestParam(defaultValue = "0", required = false) Integer page,
 													  @RequestParam(defaultValue = "5", required = false) Integer size,
 													  @RequestParam(required = false) String[] sort) {
 		
-		Collection<Address> addresses = addressService.findAll(customerId, page, size, sort);
+		Collection<AddressResponseModel> addresses = addressService.findAll(customerId, page, size, sort);
 		
 		return ResponseEntity.ok(addresses);
 	}
 	
 	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Address> getById(@PathVariable int id) {
+	public ResponseEntity<AddressResponseModel> getById(@PathVariable int id) {
 		
-		Address address = addressService.findById(id);
+		AddressResponseModel address = addressService.findByIdAsModel(id);
 		
 		return ResponseEntity.ok(address);
 	}

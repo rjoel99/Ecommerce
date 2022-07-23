@@ -1,6 +1,7 @@
 package com.joel.service.impl;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.joel.entity.Product;
 import com.joel.model.ProductRequestModel;
+import com.joel.model.ProductResponseModel;
 import com.joel.repository.ProductRepository;
 import com.joel.service.ProductService;
 
@@ -29,7 +31,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Collection<Product> findAll() {
+	public Collection<ProductResponseModel> findAll() {
 		
 		log.info("Getting all products...");
 		
@@ -37,7 +39,14 @@ public class ProductServiceImpl implements ProductService {
 		
 		log.info("Products obtained");
 		
-		return products;
+		return products.stream()
+				.map(p -> ProductResponseModel.builder()
+						.name(p.getName())
+						.description(p.getDescription())
+						.price(p.getPrice())
+						.currencyCode(p.getCurrencyCode())
+						.build())
+				.collect(Collectors.toList());
 	}
 	
 	@Override
@@ -51,6 +60,19 @@ public class ProductServiceImpl implements ProductService {
 		log.info("Product with id {} obtained", productId);
 		
 		return product;
+	}
+	
+	@Override
+	public ProductResponseModel findByIdAsModel(int productId) {
+	
+		Product product = findById(productId);
+		
+		return ProductResponseModel.builder()
+				.name(product.getName())
+				.description(product.getDescription())
+				.price(product.getPrice())
+				.currencyCode(product.getCurrencyCode())
+				.build();
 	}
 	
 	@Override
@@ -76,6 +98,8 @@ public class ProductServiceImpl implements ProductService {
 		product.setDescription(productReq.getDescription());
 		product.setPrice(productReq.getPrice());
 		product.setCurrencyCode(productReq.getCurrencyCode());
+		
+		productRepository.save(product);
 		
 		log.info("Product with id {} updated", productId);
 	}

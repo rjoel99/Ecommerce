@@ -4,15 +4,15 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -48,19 +48,17 @@ public class Customer {
 	@Pattern(regexp = "(\\(\\d{3}\\)[.-]?|\\d{3}[.-]?)?\\d{3}[.-]?\\d{4}")
 	private String phone;
 	
-	@JsonIgnore
 	@ToString.Exclude
 	@OneToMany
 	private List<Payment> payments;
 	
-	@JsonIgnore
 	@ToString.Exclude
 	@OneToMany(mappedBy = "customer")
 	private List<Address> addresses;
 	
-//	@OneToOne(fetch = FetchType.LAZY)
-//	private Cart cart;
-	
+	@ToString.Exclude
+	@OneToOne(fetch = FetchType.LAZY)
+	private Cart cart;
 	
 	public Customer(String fistName, String lastName, String phone) {
 		this.firstName = fistName;

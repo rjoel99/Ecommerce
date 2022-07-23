@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import com.joel.entity.Order;
 import com.joel.model.OrderRequestModel;
+import com.joel.model.OrderResponseModel;
 
 /**
  * 
@@ -12,7 +13,8 @@ import com.joel.model.OrderRequestModel;
  */
 public interface OrderService {
 
-	Collection<Order> findAllByCartId(int cartId);
+	Collection<OrderResponseModel> findAll(int cartId);
+	OrderResponseModel findByIdAsModel(int orderId);
 	Order findById(int orderId);
 	Order create(int cartId);
 	void updateById(int orderId, OrderRequestModel orderReq);

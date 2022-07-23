@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 
 import com.joel.entity.CurrencyCode;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +17,7 @@ import lombok.Setter;
  * @author joel.rubio
  *
  */
+@AllArgsConstructor
 @Getter
 @Setter
 public class ProductRequestModel {

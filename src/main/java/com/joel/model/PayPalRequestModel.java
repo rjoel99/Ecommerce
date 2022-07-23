@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.joel.model;
 
 import javax.validation.constraints.NotEmpty;

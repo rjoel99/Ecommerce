@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.joel.entity.Cart;
 import com.joel.message.SuccessMessage;
+import com.joel.model.CartResponseModel;
 import com.joel.service.CartService;
 
 /**
@@ -33,9 +33,9 @@ public class CartController {
 	}
 
 	@GetMapping(path = "/{cart_id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Cart> getByid(@PathVariable("cart_id") int cartId) {
+	public ResponseEntity<CartResponseModel> getByid(@PathVariable("cart_id") int cartId) {
 		
-		Cart cart = cartService.findById(cartId);
+		CartResponseModel cart = cartService.findByIdAsModel(cartId);
 		
 		return ResponseEntity.ok(cart);
 	}

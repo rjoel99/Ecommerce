@@ -3,6 +3,7 @@ package com.joel.service.impl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -16,6 +17,7 @@ import com.joel.entity.Address;
 import com.joel.entity.Customer;
 import com.joel.model.AddressPatchRequestModel;
 import com.joel.model.AddressRequestModel;
+import com.joel.model.AddressResponseModel;
 import com.joel.repository.AddressRepository;
 import com.joel.service.AddressService;
 import com.joel.service.CustomerService;
@@ -40,7 +42,8 @@ public class AddressServiceImpl implements AddressService {
 		this.customerService = customerService;
 	}
 	
-	public Collection<Address> findAll(int customerId, Integer page, Integer size, String[] sort) {
+	@Override
+	public Collection<AddressResponseModel> findAll(int customerId, Integer page, Integer size, String[] sort) {
 		
 		log.info("Getting all addresses...");
 		
@@ -53,7 +56,14 @@ public class AddressServiceImpl implements AddressService {
 		
 		log.info("Addresses obtained");
 		
-		return addresses;
+		return addresses.stream()
+				.map(a -> AddressResponseModel.builder()
+							.addressLine(a.getAddressLine())
+							.city(a.getCity())
+							.state(a.getState())
+							.zipCode(a.getZipCode())
+							.build())
+				.collect(Collectors.toList());
 	}
 	
 	private List<Order> getSortProperties(String[] sort) {
@@ -83,12 +93,13 @@ public class AddressServiceImpl implements AddressService {
 		
 		return sortProperties;
 	}
-
+	
+	@Override
 	public Address findById(int addressId) {
 		
 		log.info("Getting address by id {}...", addressId);
 		
-		Address address = addressRepository.findById(1)
+		Address address = addressRepository.findById(addressId)
 				.orElseThrow(() -> new EntityNotFoundException("The address with id " + addressId + " doesn't exist"));
 		
 		log.info("Address with id {} obtained", addressId);
@@ -96,6 +107,20 @@ public class AddressServiceImpl implements AddressService {
 		return address;
 	}
 	
+	@Override
+	public AddressResponseModel findByIdAsModel(int addressId) {
+		
+		Address address = findById(addressId);
+		
+		return AddressResponseModel.builder()
+				.addressLine(address.getAddressLine())
+				.city(address.getCity())
+				.state(address.getState())
+				.zipCode(address.getZipCode())
+				.build();
+	}
+	
+	@Override
 	public void add(int customerId, AddressRequestModel addressReqModel) {
 		
 		Customer customer = customerService.findById(customerId);
@@ -110,6 +135,7 @@ public class AddressServiceImpl implements AddressService {
 		log.info("Address added");
 	}
 	
+	@Override
 	public void updateSomeById(int addressId, AddressPatchRequestModel addressReqModel) {
 		
 		Address addressSaved = findById(addressId);
@@ -133,6 +159,7 @@ public class AddressServiceImpl implements AddressService {
 		log.info("Address with id {} updated", addressId);
 	}
 	
+	@Override
 	public void updateAllById(int addressId, AddressRequestModel addressReqModel) {
 		
 		Address addressSaved = findById(addressId);
@@ -149,6 +176,7 @@ public class AddressServiceImpl implements AddressService {
 		log.info("Address with id {} updated", addressId);
 	}
 	
+	@Override
 	public void deleteById(int addressId) {
 		
 		Address address = findById(addressId);

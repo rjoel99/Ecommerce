@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.joel.entity.Customer;
 import com.joel.message.SuccessMessage;
 import com.joel.model.CustomerRequestModel;
+import com.joel.model.CustomerResponseModel;
 import com.joel.service.CustomerService;
 
 /**
@@ -38,19 +38,19 @@ public class CustomerController {
 	
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Collection<Customer>> getAll(@RequestParam(defaultValue = "0", required = false) Integer page, 
+	public ResponseEntity<Collection<CustomerResponseModel>> getAll(@RequestParam(defaultValue = "0", required = false) Integer page, 
 													   @RequestParam(defaultValue = "5", required = false) Integer size,
 													   @RequestParam(required = false) String[] sort) {
 		
-		Collection<Customer> customers = customerService.findAll(page, size, sort);
+		Collection<CustomerResponseModel> customers = customerService.findAll(page, size, sort);
 		
 		return ResponseEntity.ok(customers);
 	}
 	
 	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Customer> getById(@PathVariable int id) {
+	public ResponseEntity<CustomerResponseModel> getById(@PathVariable int id) {
 		
-		Customer customer = customerService.findById(id);
+		CustomerResponseModel customer = customerService.findByIdAsModel(id);
 		
 		return ResponseEntity.ok(customer);
 	}

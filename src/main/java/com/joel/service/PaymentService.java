@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import com.joel.entity.Payment;
 import com.joel.model.PaymentRequestModel;
+import com.joel.model.PaymentResponseModel;
 
 /**
  * 
@@ -12,8 +13,9 @@ import com.joel.model.PaymentRequestModel;
  */
 public interface PaymentService {
 
-	Collection<Payment> findAll(int customerId);
-	Payment findById(int id);
+	Collection<PaymentResponseModel> findAll(int customerId);
+	PaymentResponseModel findByIdAsModel(int paymentId);
+	Payment findById(int paymentId);
 	void add(int customerId, PaymentRequestModel payment);
 	void updateById(int paymentId, PaymentRequestModel payment);
 	void deleteById(int paymentId);

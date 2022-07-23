@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.joel.entity.Product;
 import com.joel.message.SuccessMessage;
 import com.joel.model.ProductRequestModel;
+import com.joel.model.ProductResponseModel;
 import com.joel.service.ProductService;
 
 /**
@@ -38,17 +38,17 @@ public class ProductController {
 	}
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Collection<Product>> getAll() {
+	public ResponseEntity<Collection<ProductResponseModel>> getAll() {
 		
-		Collection<Product> products = productService.findAll();
+		Collection<ProductResponseModel> products = productService.findAll();
 		
 		return ResponseEntity.ok(products);
 	}
 	
 	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Product> getById(@PathVariable int id) {
+	public ResponseEntity<ProductResponseModel> getById(@PathVariable int id) {
 		
-		Product product = productService.findById(id);
+		ProductResponseModel product = productService.findByIdAsModel(id);
 		
 		return ResponseEntity.ok(product);
 	}

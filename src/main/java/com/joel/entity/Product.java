@@ -19,8 +19,6 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -58,17 +56,14 @@ public class Product {
 	@Column(name = "currency_code")
 	private CurrencyCode currencyCode;
 	
-	@JsonIgnore
 	@CreationTimestamp
 	@Column(name = "created_at", updatable = false, nullable = false)
 	private LocalDateTime createdAt;
 
-	@JsonIgnore
 	@UpdateTimestamp
 	@Column(name = "updated_at", nullable = false)
 	private LocalDateTime updatedAt;
 	
-	@JsonIgnore
 	@ToString.Exclude
 	@ManyToMany(mappedBy = "products")
 	private List<Cart> carts;

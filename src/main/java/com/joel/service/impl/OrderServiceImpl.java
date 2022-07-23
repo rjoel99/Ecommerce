@@ -1,6 +1,7 @@
 package com.joel.service.impl;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -10,6 +11,7 @@ import com.joel.entity.Cart;
 import com.joel.entity.Order;
 import com.joel.entity.OrderStatus;
 import com.joel.model.OrderRequestModel;
+import com.joel.model.OrderResponseModel;
 import com.joel.repository.OrderRepository;
 import com.joel.service.CartService;
 import com.joel.service.OrderService;
@@ -33,7 +35,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public Collection<Order> findAllByCartId(int cartId) {
+	public Collection<OrderResponseModel> findAll(int cartId) {
 
 		log.info("Getting all orders by cart id {}...", cartId);
 		
@@ -41,9 +43,14 @@ public class OrderServiceImpl implements OrderService {
 		
 		log.info("Orders by cart id {} obtained", cartId);
 		
-		return orders;
+		return orders.stream()
+				.map(o -> OrderResponseModel.builder()
+							.id(o.getId())
+							.status(o.getStatus())
+							.build())
+				.collect(Collectors.toList());
 	}
-
+	
 	@Override
 	public Order findById(int orderId) {
 		
@@ -55,6 +62,17 @@ public class OrderServiceImpl implements OrderService {
 		log.info("Order with id {} obtained", orderId);
 		
 		return order;
+	}
+	
+	@Override
+	public OrderResponseModel findByIdAsModel(int orderId) {
+		
+		Order order = findById(orderId);
+		
+		return OrderResponseModel.builder()
+				.id(order.getId())
+				.status(order.getStatus())
+				.build();
 	}
 
 	@Override

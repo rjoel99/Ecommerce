@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.joel.model;
 
 import java.util.Map;
@@ -29,21 +26,32 @@ public abstract class PaymentRequestModel {
 
 	public abstract boolean isEmpty();
 	
+	private static Map<Class<? extends PaymentRequestModel>, BiFunction<PaymentRequestModel, Customer, Payment>> paymentsToCreate;
+	private static Map<Class<? extends PaymentRequestModel>, BiConsumer<Payment, PaymentRequestModel>> paymentsToUpdate;
 	
-	public static Map<Class<? extends PaymentRequestModel>, BiFunction<PaymentRequestModel, Customer, Payment>> getPaymentsToCreate() {
+	static {
 		
-		return Map.of(CreditCardRequestModel.class, PaymentRequestModel::createCreditCard,
-					  PayPalRequestModel.class, PaymentRequestModel::createPayPal);
+		paymentsToCreate = Map.of(CreditCardRequestModel.class, PaymentRequestModel::createCreditCard, 
+				  				  PayPalRequestModel.class, PaymentRequestModel::createPayPal);
+		
+		paymentsToUpdate = Map.of(CreditCardRequestModel.class, PaymentRequestModel::updateCreditCard,
+			      				  PayPalRequestModel.class, PaymentRequestModel::updatePayPal);
 	}
 	
-	public static Map<Class<? extends PaymentRequestModel>, BiConsumer<Payment, PaymentRequestModel>> getPaymentsToUpdate() {
+	public static Payment createPayment(PaymentRequestModel paymentReq, Customer customer) {
 		
-		return Map.of(CreditCardRequestModel.class, PaymentRequestModel::updateCreditCard,
-					  PayPalRequestModel.class, PaymentRequestModel::updatePayPal);
+		return paymentsToCreate.get(paymentReq.getClass())
+				.apply(paymentReq, customer);
+	}
+	
+	public static void updatePayment(Payment payment, PaymentRequestModel paymentReq) {
+		
+		paymentsToUpdate.get(paymentReq.getClass())
+			.accept(payment, paymentReq);
 	}
 	
 	
-	public static Payment createCreditCard(PaymentRequestModel paymentReq, Customer customer) {
+	private static Payment createCreditCard(PaymentRequestModel paymentReq, Customer customer) {
 		
 		CreditCardRequestModel creditCardReq = (CreditCardRequestModel) paymentReq;
 		
@@ -51,7 +59,7 @@ public abstract class PaymentRequestModel {
 							  creditCardReq.getExpireMonth(), creditCardReq.getExpireYear(), customer);
 	}
 	
-	public static Payment createPayPal(PaymentRequestModel paymentReq, Customer customer) {
+	private static Payment createPayPal(PaymentRequestModel paymentReq, Customer customer) {
 		
 		PayPalRequestModel payPalReq = (PayPalRequestModel) paymentReq;
 		
@@ -59,7 +67,7 @@ public abstract class PaymentRequestModel {
 	}
 	
 	
-	public static void updateCreditCard(Payment payment, PaymentRequestModel paymentReq) {
+	private static void updateCreditCard(Payment payment, PaymentRequestModel paymentReq) {
 		
 		if (!(payment instanceof CreditCard))
 			throw new ClassCastException("The id of payment is incorrect");
@@ -84,7 +92,7 @@ public abstract class PaymentRequestModel {
 	}
 	
 	
-	public static void updatePayPal(Payment payment, PaymentRequestModel paymentReq) {
+	private static void updatePayPal(Payment payment, PaymentRequestModel paymentReq) {
 		
 		if (!(payment instanceof PayPal))
 			throw new ClassCastException("The id of payment is incorrect");
