@@ -16,6 +16,6 @@ public interface OrderService {
 	Collection<OrderResponseModel> findAll(int cartId);
 	OrderResponseModel findByIdAsModel(int orderId);
 	Order findById(int orderId);
-	Order create(int cartId);
+	OrderResponseModel create(int cartId);
 	void updateById(int orderId, OrderRequestModel orderReq);
 }

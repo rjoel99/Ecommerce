@@ -76,7 +76,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public Order create(int cartId) {
+	public OrderResponseModel create(int cartId) {
 		
 		Cart cart = cartService.findById(cartId);
 		
@@ -91,7 +91,11 @@ public class OrderServiceImpl implements OrderService {
 		
 		log.info("Order created");
 		
-		return order;
+		return OrderResponseModel.builder()
+				.id(order.getId())
+				.status(order.getStatus())
+				.createdOn(order.getCreatedOn())
+				.build();
 	}
 
 	@Override

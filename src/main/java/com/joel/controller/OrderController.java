@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.joel.entity.Order;
 import com.joel.message.SuccessMessage;
 import com.joel.model.OrderRequestModel;
 import com.joel.model.OrderResponseModel;
@@ -53,9 +52,9 @@ public class OrderController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Order> create(@PathVariable("cart_id") int cartId) {
+	public ResponseEntity<OrderResponseModel> create(@PathVariable("cart_id") int cartId) {
 		
-		Order order = orderService.create(cartId);
+		OrderResponseModel order = orderService.create(cartId);
 		
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(order);
