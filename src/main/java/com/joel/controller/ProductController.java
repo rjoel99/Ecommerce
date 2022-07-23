@@ -58,11 +58,12 @@ public class ProductController {
 		
 		productService.add(productReq);
 		
-		return ResponseEntity.ok(SuccessMessage.builder()
-				.status(HttpStatus.OK.value())
-				.message("Product added")
-				.datetime(LocalDateTime.now())
-				.build());
+		return ResponseEntity.status(HttpStatus.CREATED) 
+				.body(SuccessMessage.builder()
+					.status(HttpStatus.CREATED.value())
+					.message("Product added")
+					.datetime(LocalDateTime.now())
+					.build());
 	}
 	
 	@PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)

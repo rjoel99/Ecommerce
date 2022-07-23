@@ -33,7 +33,7 @@ public class CartController {
 	}
 
 	@GetMapping(path = "/{cart_id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<CartResponseModel> getByid(@PathVariable("cart_id") int cartId) {
+	public ResponseEntity<CartResponseModel> getById(@PathVariable("cart_id") int cartId) {
 		
 		CartResponseModel cart = cartService.findByIdAsModel(cartId);
 		
@@ -45,11 +45,12 @@ public class CartController {
 		
 		cartService.addProductToCart(cartId, productId);
 		
-		return ResponseEntity.ok(SuccessMessage.builder()
-				.status(HttpStatus.OK.value())
-				.message("Product added to cart")
-				.datetime(LocalDateTime.now())
-				.build());
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(SuccessMessage.builder()
+					.status(HttpStatus.CREATED.value())
+					.message("Product added to cart")
+					.datetime(LocalDateTime.now())
+					.build());
 	}
 	
 	@DeleteMapping(path = "/{cart_id}")

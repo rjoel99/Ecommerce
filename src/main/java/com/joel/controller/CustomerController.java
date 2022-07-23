@@ -62,7 +62,7 @@ public class CustomerController {
 		
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(SuccessMessage.builder()
-						.status(HttpStatus.OK.value())
+						.status(HttpStatus.CREATED.value())
 						.message("Customer added")
 						.datetime(LocalDateTime.now())
 						.build());

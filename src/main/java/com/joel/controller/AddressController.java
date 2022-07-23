@@ -69,7 +69,7 @@ public class AddressController {
 		
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(SuccessMessage.builder()
-						.status(HttpStatus.OK.value())
+						.status(HttpStatus.CREATED.value())
 						.message("Address added")
 						.datetime(LocalDateTime.now())
 						.build());

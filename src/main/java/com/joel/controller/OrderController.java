@@ -57,7 +57,8 @@ public class OrderController {
 		
 		Order order = orderService.create(cartId);
 		
-		return ResponseEntity.ok(order);
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(order);
 	}
 	
 	@PutMapping(path = "/{order_id}", consumes = MediaType.APPLICATION_JSON_VALUE)

@@ -62,7 +62,7 @@ public class PaymentController {
 		
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(SuccessMessage.builder()
-						.status(HttpStatus.OK.value())
+						.status(HttpStatus.CREATED.value())
 						.message("Payment created")
 						.datetime(LocalDateTime.now())
 						.build());
