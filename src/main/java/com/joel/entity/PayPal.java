@@ -25,6 +25,11 @@ public class PayPal extends Payment {
 	
 	private String email;
 	
+	public PayPal(String number, String email) {
+		this.number = number;
+		this.email = email;
+	}
+	
 	public PayPal(String number, String email, Customer customer) {
 		super(customer);
 		this.number = number;

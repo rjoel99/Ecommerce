@@ -39,6 +39,13 @@ public class CreditCard extends Payment {
 	@Column(name = "expire_year")
 	private int expireYear;
 	
+	public CreditCard(String number, String holder, int expireMonth, int expireYear) {
+		this.number = number;
+		this.holder = holder;
+		this.expireMonth = expireMonth;
+		this.expireYear = expireYear;
+	}
+	
 	public CreditCard(String number, String holder, int expireMonth, int expireYear, Customer customer) {
 		super(customer);
 		this.number = number;

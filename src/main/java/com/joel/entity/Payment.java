@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -23,6 +24,7 @@ import lombok.ToString;
  * @author joel.rubio
  *
  */
+@Data
 @NoArgsConstructor
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
